@@ -244,7 +244,9 @@ class Hello extends CI_Controller {
 			echo "<td>".$row['pno']."</td>";
 			// echo "<td>".$row['image']."</td>";
 			echo "<td><img src='http://localhost:8080/coder/images/".$row['image']."' style='width:100px;height:100px;'></td>";
+			echo "<td><button type='button' class='btn btn-success btn-sm edit' data-toggle='modal' data-target='#myModal' data-id='".$row['id']."'>Edit</button></td>";
 			echo "<td><button type='button' class='btn btn-danger btn-sm delete' data-id='".$row['id']."'>Delete</button></td>";
+			
 			echo "<tr>";
 		}
 		// print_r($select);
@@ -255,5 +257,72 @@ class Hello extends CI_Controller {
 		$id=$this->input->post('id');
 		$this->db->where('id',$id);
 		$this->db->delete("tbl_insert");
+	}
+	public function country()
+	{
+		$this->load->view("country");
+	}
+	public function state()
+	{
+		$id=$_POST['sid'];
+		// print_r($id);
+		// exit();
+		$this->db->where('country_id',$id);
+		$select=$this->db->get("state")->result_array();
+		foreach($select as $row)
+		{
+			echo "<option>".$row['name']."</option>";
+
+		}
+		// $this->load->view("country");
+	}
+	public function city()
+	{
+		$id=$_POST['sid'];
+		// print_r($id);
+		// exit();
+		$this->db->where('country_id',$id);
+		$select=$this->db->get("state")->result_array();
+		foreach($select as $row)
+		{
+			echo "<option>".$row['name']."</option>";
+
+		}
+		// $this->load->view("country");
+	}
+	public function editajax($id=null)
+	{
+		// $this->load->view("ajaximage");
+		$id=$this->input->post('id');
+		$this->db->where('id',$id);
+		$select=$this->db->get("tbl_insert")->result_array();
+		// print_r("<pre>");
+		// print_r($select);
+		// exit();
+		foreach($select as $row)
+		{
+			// echo "hello";
+			echo '<div class="form-group">
+			<label for="exampleInputEmail1">First Name</label>
+			<input type="text" class="form-control"  name="fname" value="'.$row["fname"].'"    id="exampleInputEmail1" aria-describedby="emailHelp"></div>
+			<div class="form-group"><label for="exampleInputPassword1">Last Name</label><input type="text" class="form-control" value="'.$row["lname"].'" name="lname"  >
+            <input type="hidden" class="form-control" value="'.$row["id"].'" name="id"></div>
+			<div class="form-group">
+			<label for="exampleInputPassword1">Email</label>
+			<input type="email" class="form-control" name="email" value="'.$row["email"].'" >
+		  </div>
+		  <div class="form-group">
+			<label for="exampleInputPassword1">Phone No</label>
+			<input type="text" class="form-control" name="pno" value="'.$row["pno"].'"   pattern="[0-9]{10}" title="Enter 10 Digit Number">
+		  </div>
+		  <div class="form-group">
+			<label for="exampleInputPassword1">Image</label>
+			<input type="file" class="form-control" name="filename">
+			<input type="hidden" class="form-control" value="'.$row["image"].'"  name="oldimage">
+			<img src="http://localhost:8080/coder/images/'.$row['image'].'" style="width:100px;height:100px;">
+		  </div>
+		  <input type="submit" class="btn btn-primary" name="submit">';
+
+		}
 	}
 }
